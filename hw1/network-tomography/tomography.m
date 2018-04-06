@@ -1,14 +1,20 @@
 
-nNodes = 10;
-nEdges = 20;
-nMonitors = 4;
+% build graph
+
+nNodes = 20;
+nEdges = 40;
+nMonitors = 6;
 
 fprintf("%d vertices, %d edges.\n", nNodes, nEdges);
 
 G = makeGraph(nNodes,nEdges);
 
+% choose monitored nodes
+
 monitoredNodes = randperm(nNodes);
 monitoredNodes = monitoredNodes(1:nMonitors);
+
+% build and show paths
 
 paths = makePaths(G, monitoredNodes);
 
@@ -19,24 +25,34 @@ for path = paths
     disp(cell2mat(path));
 end
 
+% build and print test matrix
+
 testMatrix = makeTestMatrix(G, paths);
 
 fprintf("Test matrix:\n");
 disp(testMatrix);
 
-identifiability = findIdentifiabilityMatrix(testMatrix, nNodes - 1);
+% build and print identifiability matrix
+
+ID = buildIdentifiabilityMatrix(testMatrix, nNodes - 1);
 
 fprintf("Identifiability matrix:\n");
-disp(identifiability);
+disp(ID);
 
-maxID = maxIdentifiable(testMatrix);
+% compute max identifiable
+
+maxID = maxIdentifiable(testMatrix, ID);
 
 fprintf("Max identifiable: %d.\n", maxID);
 
+% show all k-identifiable nodes for k <= max identifiable
+
 for k = 1:maxID
-    ID = findIdentifiable(testMatrix,k);
+    V = findIdentifiable(testMatrix,k,ID);
     fprintf("%d-identifiables:\n", k);
-    disp(ID);
+    disp(V);
 end
+
+% plot graph
 
 plotGraph(G, paths);

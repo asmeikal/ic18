@@ -1,9 +1,9 @@
 
-% Function findIdentifiabilityMatrix(testMatrix, maxFailures) computes the
+% Function buildIdentifiabilityMatrix(testMatrix, maxFailures) computes the
 % identifiability matrix given by testMatrix for up to maxFailures
 % failures. The identifiability matrix is 1 in position (k,v) iff node v is
-% (k-1)-identifiable. 0-identifiable nodes are monitored nodes.
-function ID = findIdentifiabilityMatrix(testMatrix, maxFailures)
+% k-identifiable.
+function ID = buildIdentifiabilityMatrix(testMatrix, maxFailures)
     % find number of nodes
     nNodes = size(testMatrix,2);
     % initialise identifiability matrix
@@ -15,7 +15,7 @@ function ID = findIdentifiabilityMatrix(testMatrix, maxFailures)
     monitoredNodes = find(ID(1,:));
     % cicle up to maxFailures
     for k = 1:maxFailures
-        %fprintf("Computing %d identifiability...\n", k);
+        fprintf("Computing %d identifiability...\n", k);
         % k-identifibility implies (k-1) identifiability
         ID(k+1,:) = ID(k,:);
         % cicle on all nodes
@@ -53,8 +53,10 @@ function ID = findIdentifiabilityMatrix(testMatrix, maxFailures)
         end
         % if current row is all zero, exit
         if ~any(ID(k+1,:))
-            %fprintf("No k-identifiable nodes for k >= %d, breaking.\n", k);
+            fprintf("No k-identifiable nodes for k >= %d, breaking.\n", k);
             break;
         end
     end
+    % cut out first row
+    ID = ID(2:maxFailures+1,:);
 end
