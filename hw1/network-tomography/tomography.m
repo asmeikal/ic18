@@ -1,9 +1,11 @@
 
+clear
+
 % build graph
 
-nNodes = 20;
-nEdges = 40;
-nMonitors = 6;
+nNodes = 40;
+nEdges = 80;
+nMonitors = 8;
 
 fprintf("%d vertices, %d edges.\n", nNodes, nEdges);
 

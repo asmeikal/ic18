@@ -1,5 +1,6 @@
 
-sizes = 10:10:100;
+% sizes = 10:10:100;
+sizes = 10:10:50;
 
 my_times = zeros(size(sizes));
 Matlab_times = zeros(size(sizes));
@@ -15,8 +16,11 @@ for t = 1:n_trials
         B = makeSparse(n, s);
         A_comp = toCompactCSR(A);
         B_comp = toCompactCSR(B);
+        A = full(A);
+        B = full(B);
         tic;
         C = A * B;
+        % C = toCompactCSR(toFullCompactCSR(A_comp) * toFullCompactCSR(B_comp));
         Matlab_times(i) = Matlab_times(i) + toc;
         tic;
         C_comp = prodCompactCSR(A_comp, B_comp);
